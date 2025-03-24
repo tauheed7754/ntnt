@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Made by Tauheed - Multi-Function Clock</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --accent-color: #e74c3c;
+            --dark-color: #2c3e50;
+            --light-color: #ecf0f1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: var(--light-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background-color: rgba(44, 62, 80, 0.8);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--light-color);
+            font-size: 2.5rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            margin: 0 5px;
+            background-color: var(--dark-color);
+            color: var(--light-color);
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .tab-btn:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary-color);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+            border-radius: 15px;
+            background-color: rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Analog Clock Styles */
+        .clock {
+            width: 300px;
+            height: 300px;
+            margin: 20px auto;
+            position: relative;
+            border: 10px solid var(--light-color);
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3), 
+                        inset 0 0 10px rgba(0, 0, 0, 0.2);
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .clock-face {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform: translateY(-3px); /* account for the height of the clock hands */
+        }
+
+        .hand {
+            width: 50%;
+            height: 6px;
+            background: var(--light-color);
+            position: absolute;
+            top: 50%;
+            transform-origin: 100%;
+            transform: rotate(90deg);
+            transition: all 0.05s;
+            transition-timing-function: cubic-bezier(0.1, 2.7, 0.58, 1);
+            border-radius: 3px;
+        }
+
+        .hour-hand {
+            width: 35%;
+            left: 15%;
+            height: 8px;
+            background: var(--primary-color);
+        }
+
+        .min-hand {
+            width: 45%;
+            left: 5%;
+            height: 6px;
+            background: var(--secondary-color);
+        }
+
+        .second-hand {
+            width: 48%;
+            left: 2%;
+            height: 3px;
+            background: var(--accent-color);
+        }
+
+        .center-dot {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 15px;
+            height: 15px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+        }
+
+        /* Digital Clock Styles */
+        .digital-clock {
+            font-size: 4rem;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0;
+            letter-spacing: 5px;
+            color: var(--light-color);
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .date-display {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--light-color);
+        }
+
+        /* Timer & Stopwatch Styles */
+        .time-display {
+            font-size: 4rem;
+            font-weight: bold;
+            margin: 20px 0;
+            color: var(--light-color);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: white;
+        }
+
+        .btn-start {
+            background-color: var(--secondary-color);
+        }
+
+        .btn-stop {
+            background-color: var(--accent-color);
+        }
+
+        .btn-reset {
+            background-color: var(--dark-color);
+            color: var(--light-color);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        /* Timer Input */
+        .timer-input {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .timer-input input {
+            width: 80px;
+            padding: 10px;
+            font-size: 1.5rem;
+            text-align: center;
+            border: none;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: var(--light-color);
+        }
+
+        .timer-input span {
+            font-size: 1.5rem;
+            line-height: 2.5;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .clock {
+                width: 250px;
+                height: 250px;
+            }
+
+            .digital-clock {
+                font-size: 3rem;
+            }
+
+            .time-display {
+                font-size: 3rem;
+            }
+
+            .controls {
+                flex-wrap: wrap;
+            }
+
+            .btn {
+                padding: 10px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Made by Tauheed</h1>
+        
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="analog">Analog Clock</button>
+            <button class="tab-btn" data-tab="digital">Digital Clock</button>
+            <button class="tab-btn" data-tab="stopwatch">Stopwatch</button>
+            <button class="tab-btn" data-tab="timer">Timer</button>
+        </div>
+        
+        <!-- Analog Clock Tab -->
+        <div id="analog" class="tab-content active">
+            <div class="clock">
+                <div class="clock-face">
+                    <div class="hand hour-hand"></div>
+                    <div class="hand min-hand"></div>
+                    <div class="hand second-hand"></div>
+                    <div class="center-dot"></div>
+                </div>
+            </div>
+            <div class="date-display" id="analog-date"></div>
+        </div>
+        
+        <!-- Digital Clock Tab -->
+        <div id="digital" class="tab-content">
+            <div class="digital-clock" id="digital-time"></div>
+            <div class="date-display" id="digital-date"></div>
+        </div>
+        
+        <!-- Stopwatch Tab -->
+        <div id="stopwatch" class="tab-content">
+            <div class="time-display" id="stopwatch-display">00:00:00.000</div>
+            <div class="controls">
+                <button class="btn btn-start" id="stopwatch-start">Start</button>
+                <button class="btn btn-stop" id="stopwatch-stop" disabled>Stop</button>
+                <button class="btn btn-reset" id="stopwatch-reset">Reset</button>
+            </div>
+        </div>
+        
+        <!-- Timer Tab -->
+        <div id="timer" class="tab-content">
+            <div class="timer-input">
+                <input type="number" id="hours" min="0" max="23" value="0">
+                <span>:</span>
+                <input type="number" id="minutes" min="0" max="59" value="0">
+                <span>:</span>
+                <input type="number" id="seconds" min="0" max="59" value="0">
+            </div>
+            <div class="time-display" id="timer-display">00:00:00</div>
+            <div class="controls">
+                <button class="btn btn-start" id="timer-start">Start</button>
+                <button class="btn btn-stop" id="timer-stop" disabled>Stop</button>
+                <button class="btn btn-reset" id="timer-reset">Reset</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab Switching Functionality
+        document.querySelectorAll('.tab-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const tabId = button.getAttribute('data-tab');
+                
+                // Hide all tab contents
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                // Deactivate all buttons
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // Show the selected tab content and activate the button
+                document.getElementById(tabId).classList.add('active');
+                button.classList.add('active');
+            });
+        });
+
+        // Analog Clock
+        function updateAnalogClock() {
+            const now = new Date();
+            
+            const seconds = now.getSeconds();
+            const minutes = now.getMinutes();
+            const hours = now.getHours() % 12;
+            
+            const secondDegrees = ((seconds / 60) * 360) + 90;
+            const minuteDegrees = ((minutes / 60) * 360) + ((seconds / 60) * 6) + 90;
+            const hourDegrees = ((hours / 12) * 360) + ((minutes / 60) * 30) + 90;
+            
+            document.querySelector('.second-hand').style.transform = `rotate(${secondDegrees}deg)`;
+            document.querySelector('.min-hand').style.transform = `rotate(${minuteDegrees}deg)`;
+            document.querySelector('.hour-hand').style.transform = `rotate(${hourDegrees}deg)`;
+            
+            // Update date display
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('analog-date').textContent = now.toLocaleDateString(undefined, options);
+        }
+        
+        setInterval(updateAnalogClock, 1000);
+        updateAnalogClock(); // Initial call
+
+        // Digital Clock
+        function updateDigitalClock() {
+            const now = new Date();
+            
+            let hours = now.getHours();
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            
+            hours = hours % 12;
+            hours = hours ? hours : 12; // the hour '0' should be '12'
+            hours = hours.toString().padStart(2, '0');
+            
+            document.getElementById('digital-time').textContent = `${hours}:${minutes}:${seconds} ${ampm}`;
+            
+            // Update date display
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('digital-date').textContent = now.toLocaleDateString(undefined, options);
+        }
+        
+        setInterval(updateDigitalClock, 1000);
+        updateDigitalClock(); // Initial call
+
+        // Stopwatch
+        let stopwatchInterval;
+        let stopwatchStartTime;
+        let stopwatchElapsed = 0;
+        
+        document.getElementById('stopwatch-start').addEventListener('click', () => {
+            if (!stopwatchInterval) {
+                stopwatchStartTime = Date.now() - stopwatchElapsed;
+                stopwatchInterval = setInterval(updateStopwatch, 10);
+                document.getElementById('stopwatch-start').disabled = true;
+                document.getElementById('stopwatch-stop').disabled = false;
+            }
+        });
+        
+        document.getElementById('stopwatch-stop').addEventListener('click', () => {
+            if (stopwatchInterval) {
+                clearInterval(stopwatchInterval);
+                stopwatchInterval = null;
+                document.getElementById('stopwatch-start').disabled = false;
+                document.getElementById('stopwatch-stop').disabled = true;
+            }
+        });
+        
+        document.getElementById('stopwatch-reset').addEventListener('click', () => {
+            clearInterval(stopwatchInterval);
+            stopwatchInterval = null;
+            stopwatchElapsed = 0;
+            document.getElementById('stopwatch-display').textContent = '00:00:00.000';
+            document.getElementById('stopwatch-start').disabled = false;
+            document.getElementById('stopwatch-stop').disabled = true;
+        });
+        
+        function updateStopwatch() {
+            const elapsed = Date.now() - stopwatchStartTime;
+            stopwatchElapsed = elapsed;
+            
+            const hours = Math.floor(elapsed / (1000 * 60 * 60)).toString().padStart(2, '0');
+            const minutes = Math.floor((elapsed % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+            const seconds = Math.floor((elapsed % (1000 * 60)) / 1000).toString().padStart(2, '0');
+            const milliseconds = (elapsed % 1000).toString().padStart(3, '0');
+            
+            document.getElementById('stopwatch-display').textContent = `${hours}:${minutes}:${seconds}.${milliseconds}`;
+        }
+
+        // Timer
+        let timerInterval;
+        let timerEndTime;
+        
+        document.getElementById('timer-start').addEventListener('click', () => {
+            if (!timerInterval) {
+                const hours = parseInt(document.getElementById('hours').value) || 0;
+                const minutes = parseInt(document.getElementById('minutes').value) || 0;
+                const seconds = parseInt(document.getElementById('seconds').value) || 0;
+                
+                const totalSeconds = hours * 3600 + minutes * 60 + seconds;
+                
+                if (totalSeconds > 0) {
+                    timerEndTime = Date.now() + totalSeconds * 1000;
+                    timerInterval = setInterval(updateTimer, 10);
+                    document.getElementById('timer-start').disabled = true;
+                    document.getElementById('timer-stop').disabled = false;
+                    document.getElementById('hours').disabled = true;
+                    document.getElementById('minutes').disabled = true;
+                    document.getElementById('seconds').disabled = true;
+                }
+            }
+        });
+        
+        document.getElementById('timer-stop').addEventListener('click', () => {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+                document.getElementById('timer-start').disabled = false;
+                document.getElementById('timer-stop').disabled = true;
+                document.getElementById('hours').disabled = false;
+                document.getElementById('minutes').disabled = false;
+                document.getElementById('seconds').disabled = false;
+            }
+        });
+        
+        document.getElementById('timer-reset').addEventListener('click', () => {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            document.getElementById('timer-display').textContent = '00:00:00';
+            document.getElementById('timer-start').disabled = false;
+            document.getElementById('timer-stop').disabled = true;
+            document.getElementById('hours').value = '0';
+            document.getElementById('minutes').value = '0';
+            document.getElementById('seconds').value = '0';
+            document.getElementById('hours').disabled = false;
+            document.getElementById('minutes').disabled = false;
+            document.getElementById('seconds').disabled = false;
+        });
+        
+        function updateTimer() {
+            const remaining = timerEndTime - Date.now();
+            
+            if (remaining <= 0) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+                document.getElementById('timer-display').textContent = '00:00:00';
+                document.getElementById('timer-start').disabled = false;
+                document.getElementById('timer-stop').disabled = true;
+                document.getElementById('hours').disabled = false;
+                document.getElementById('minutes').disabled = false;
+                document.getElementById('seconds').disabled = false;
+                
+                // Play alarm sound
+                const alarm = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3');
+                alarm.play();
+                return;
+            }
+            
+            const hours = Math.floor(remaining / (1000 * 60 * 60)).toString().padStart(2, '0');
+            const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+            const seconds = Math.floor((remaining % (1000 * 60)) / 1000).toString().padStart(2, '0');
+            
+            document.getElementById('timer-display').textContent = `${hours}:${minutes}:${seconds}`;
+        }
+    </script>
+</body>
+</html>
