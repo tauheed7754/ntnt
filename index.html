@@ -3,532 +3,837 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Made by Tauheed - Multi-Function Clock</title>
+    <title>NEET Motivation Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <style>
-        :root {
-            --primary-color: #3498db;
-            --secondary-color: #2ecc71;
-            --accent-color: #e74c3c;
-            --dark-color: #2c3e50;
-            --light-color: #ecf0f1;
-        }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', sans-serif;
         }
 
         body {
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            color: var(--light-color);
+            background-color: #f5f7fa;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .page {
             min-height: 100vh;
+            width: 100%;
+            padding: 80px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s ease;
         }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        .hidden {
+            display: none;
         }
 
-        .container {
-            width: 100%;
+        .nav-buttons {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 100;
+        }
+
+        .nav-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Page 1 Styles */
+        #page1 {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        .hero-content {
+            text-align: center;
             max-width: 800px;
-            background-color: rgba(44, 62, 80, 0.8);
-            border-radius: 20px;
-            padding: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
+            z-index: 2;
         }
 
         h1 {
-            text-align: center;
+            font-size: 3.5rem;
             margin-bottom: 20px;
-            color: var(--light-color);
-            font-size: 2.5rem;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(to right, #6e8efb, #a777e3);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: fadeInDown 1s;
         }
 
-        .tabs {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
+        .subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            color: #555;
+            animation: fadeIn 1.5s;
         }
 
-        .tab-btn {
-            padding: 10px 20px;
-            margin: 0 5px;
-            background-color: var(--dark-color);
-            color: var(--light-color);
+        .start-btn {
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            color: white;
             border: none;
-            border-radius: 30px;
+            border-radius: 50px;
+            font-size: 1.2rem;
             cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             transition: all 0.3s ease;
-            font-weight: bold;
+            animation: pulse 2s infinite;
         }
 
-        .tab-btn:hover {
-            background-color: var(--primary-color);
-            transform: translateY(-2px);
+        .start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
         }
 
-        .tab-btn.active {
-            background-color: var(--primary-color);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .tab-content {
-            display: none;
-            padding: 20px;
-            border-radius: 15px;
-            background-color: rgba(255, 255, 255, 0.1);
-            text-align: center;
-        }
-
-        .tab-content.active {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Analog Clock Styles */
-        .clock {
-            width: 300px;
-            height: 300px;
-            margin: 20px auto;
-            position: relative;
-            border: 10px solid var(--light-color);
-            border-radius: 50%;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3), 
-                        inset 0 0 10px rgba(0, 0, 0, 0.2);
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .clock-face {
-            position: relative;
+        .floating-elements {
+            position: absolute;
             width: 100%;
             height: 100%;
-            transform: translateY(-3px); /* account for the height of the clock hands */
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1;
         }
 
-        .hand {
-            width: 50%;
-            height: 6px;
-            background: var(--light-color);
+        .floating-element {
             position: absolute;
-            top: 50%;
-            transform-origin: 100%;
-            transform: rotate(90deg);
-            transition: all 0.05s;
-            transition-timing-function: cubic-bezier(0.1, 2.7, 0.58, 1);
-            border-radius: 3px;
+            opacity: 0.6;
+            animation: float 6s infinite ease-in-out;
         }
 
-        .hour-hand {
-            width: 35%;
-            left: 15%;
-            height: 8px;
-            background: var(--primary-color);
+        .floating-element:nth-child(1) {
+            top: 20%;
+            left: 10%;
+            width: 60px;
+            height: 60px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%236e8efb"><path d="M12 2L4 12l8 10 8-10z"/></svg>') no-repeat;
+            animation-delay: 0s;
         }
 
-        .min-hand {
-            width: 45%;
-            left: 5%;
-            height: 6px;
-            background: var(--secondary-color);
+        .floating-element:nth-child(2) {
+            top: 60%;
+            left: 80%;
+            width: 80px;
+            height: 80px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23a777e3"><circle cx="12" cy="12" r="10"/></svg>') no-repeat;
+            animation-delay: 1s;
         }
 
-        .second-hand {
-            width: 48%;
-            left: 2%;
-            height: 3px;
-            background: var(--accent-color);
+        .floating-element:nth-child(3) {
+            top: 30%;
+            left: 70%;
+            width: 50px;
+            height: 50px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%236e8efb"><path d="M12 2L2 7l10 5 10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>') no-repeat;
+            animation-delay: 2s;
         }
 
-        .center-dot {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 15px;
-            height: 15px;
-            background: var(--accent-color);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 10;
+        .floating-element:nth-child(4) {
+            top: 70%;
+            left: 20%;
+            width: 70px;
+            height: 70px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23a777e3"><path d="M12 2L4 7l8 5 8-5zM4 17l8 5 8-5M4 12l8 5 8-5"/></svg>') no-repeat;
+            animation-delay: 3s;
         }
 
-        /* Digital Clock Styles */
-        .digital-clock {
-            font-size: 4rem;
-            font-weight: bold;
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(5deg);
+            }
+        }
+
+        /* Page 2 Styles */
+        #page2 {
+            background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+        }
+
+        .motivation-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 800px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             text-align: center;
-            margin: 20px 0;
-            letter-spacing: 5px;
-            color: var(--light-color);
-            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            transform: scale(0.9);
+            opacity: 0;
+            transition: all 0.8s ease;
         }
 
-        .date-display {
-            font-size: 1.5rem;
+        .motivation-card.active {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .motivation-card h2 {
+            font-size: 2.2rem;
             margin-bottom: 20px;
-            color: var(--light-color);
+            color: #00796b;
         }
 
-        /* Timer & Stopwatch Styles */
-        .time-display {
-            font-size: 4rem;
-            font-weight: bold;
-            margin: 20px 0;
-            color: var(--light-color);
+        .motivation-card p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            color: #555;
         }
 
-        .controls {
+        .quote-icon {
+            font-size: 3rem;
+            color: #4db6ac;
+            margin-bottom: 20px;
+        }
+
+        .doctor-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 30px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%2300796b"><path d="M12 2L4 7l8 5 8-5zM4 17l8 5 8-5M4 12l8 5 8-5"/></svg>') no-repeat center;
+            background-size: contain;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        /* Page 3 Styles */
+        #page3 {
+            background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
+        }
+
+        .study-tips {
+            max-width: 900px;
+            width: 100%;
+        }
+
+        .tips-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .tips-header h2 {
+            font-size: 2.5rem;
+            color: #ff8f00;
+            margin-bottom: 15px;
+        }
+
+        .tips-header p {
+            font-size: 1.2rem;
+            color: #666;
+        }
+
+        .tips-container {
             display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
             justify-content: center;
-            gap: 15px;
-            margin-bottom: 20px;
         }
 
-        .btn {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 30px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
+        .tip-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            width: calc(50% - 20px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
-            color: white;
+            opacity: 0;
+            transform: translateY(20px);
         }
 
-        .btn-start {
-            background-color: var(--secondary-color);
-        }
+        .tip-card:nth-child(1) { transition-delay: 0.1s; }
+        .tip-card:nth-child(2) { transition-delay: 0.3s; }
+        .tip-card:nth-child(3) { transition-delay: 0.5s; }
+        .tip-card:nth-child(4) { transition-delay: 0.7s; }
 
-        .btn-stop {
-            background-color: var(--accent-color);
-        }
-
-        .btn-reset {
-            background-color: var(--dark-color);
-            color: var(--light-color);
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .btn:active {
+        .tip-card.active {
+            opacity: 1;
             transform: translateY(0);
         }
 
-        /* Timer Input */
-        .timer-input {
+        .tip-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .tip-card h3 {
+            font-size: 1.4rem;
+            color: #ff8f00;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .tip-card h3 span {
+            margin-right: 10px;
+            font-size: 1.8rem;
+        }
+
+        .tip-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Page 4 Styles */
+        #page4 {
+            background: linear-gradient(135deg, #f1f8e9 0%, #dcedc8 100%);
+        }
+
+        .success-stories {
+            max-width: 900px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .stories-header h2 {
+            font-size: 2.5rem;
+            color: #689f38;
+            margin-bottom: 15px;
+        }
+
+        .stories-header p {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 40px;
+        }
+
+        .story-slider {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            background: white;
+            height: 400px;
+        }
+
+        .story-slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.8s ease;
+            opacity: 0;
+            transform: translateX(100%);
+        }
+
+        .story-slide.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .story-slide.prev {
+            transform: translateX(-100%);
+        }
+
+        .student-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8bc34a, #689f38);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            font-weight: bold;
+        }
+
+        .student-quote {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 20px;
+            max-width: 600px;
+        }
+
+        .student-name {
+            font-size: 1.4rem;
+            color: #689f38;
+            font-weight: 600;
+        }
+
+        .student-rank {
+            font-size: 1.1rem;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        .slider-controls {
             display: flex;
             justify-content: center;
-            gap: 10px;
+            margin-top: 30px;
+            gap: 15px;
+        }
+
+        .slider-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8bc34a, #689f38);
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .slider-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Page 5 Styles */
+        #page5 {
+            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+            text-align: center;
+        }
+
+        .final-message {
+            max-width: 800px;
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transform: scale(0.9);
+            opacity: 0;
+            transition: all 0.8s ease;
+        }
+
+        .final-message.active {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .final-message h2 {
+            font-size: 2.5rem;
+            color: #e53935;
             margin-bottom: 20px;
         }
 
-        .timer-input input {
-            width: 80px;
-            padding: 10px;
-            font-size: 1.5rem;
-            text-align: center;
+        .final-message p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 30px;
+        }
+
+        .fireworks {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .restart-btn {
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #e53935, #c62828);
+            color: white;
             border: none;
-            border-radius: 10px;
-            background-color: rgba(255, 255, 255, 0.2);
-            color: var(--light-color);
+            border-radius: 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 2;
         }
 
-        .timer-input span {
-            font-size: 1.5rem;
-            line-height: 2.5;
+        .restart-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
         }
 
-        /* Responsive Design */
-        @media (max-width: 600px) {
-            .clock {
-                width: 250px;
-                height: 250px;
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
             }
-
-            .digital-clock {
-                font-size: 3rem;
+            
+            .subtitle {
+                font-size: 1.2rem;
             }
-
-            .time-display {
-                font-size: 3rem;
+            
+            .tip-card {
+                width: 100%;
             }
-
-            .controls {
-                flex-wrap: wrap;
+            
+            .motivation-card, .final-message {
+                padding: 30px 20px;
             }
+            
+            .story-slide {
+                padding: 30px 20px;
+            }
+        }
 
-            .btn {
-                padding: 10px 20px;
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .nav-buttons {
+                bottom: 15px;
+            }
+            
+            .nav-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Made by Tauheed</h1>
-        
-        <div class="tabs">
-            <button class="tab-btn active" data-tab="analog">Analog Clock</button>
-            <button class="tab-btn" data-tab="digital">Digital Clock</button>
-            <button class="tab-btn" data-tab="stopwatch">Stopwatch</button>
-            <button class="tab-btn" data-tab="timer">Timer</button>
+    <!-- Page 1: Welcome Screen -->
+    <div class="page" id="page1">
+        <div class="floating-elements">
+            <div class="floating-element"></div>
+            <div class="floating-element"></div>
+            <div class="floating-element"></div>
+            <div class="floating-element"></div>
         </div>
-        
-        <!-- Analog Clock Tab -->
-        <div id="analog" class="tab-content active">
-            <div class="clock">
-                <div class="clock-face">
-                    <div class="hand hour-hand"></div>
-                    <div class="hand min-hand"></div>
-                    <div class="hand second-hand"></div>
-                    <div class="center-dot"></div>
+        <div class="hero-content">
+            <h1 class="animate__animated animate__fadeInDown">This is for Mrs. Dr. Saman (future dr.)</h1>
+            <p class="subtitle animate__animated animate__fadeIn">Your journey to becoming a doctor starts here</p>
+            <button class="start-btn animate__animated animate__fadeInUp" id="startBtn">This is For You (Press Here)</button>
+        </div>
+    </div>
+
+    <!-- Page 2: Motivation Message -->
+    <div class="page hidden" id="page2">
+        <div class="motivation-card">
+            <div class="doctor-icon"></div>
+            <div class="quote-icon">"</div>
+            <h2>Believe in Yourself</h2>
+            <p>Every great doctor was once a NEET aspirant like you. The road may be challenging, but remember that diamonds are formed under pressure. Your hard work today will shape your future and the lives of countless patients you'll help.</p>
+            <p>Success in NEET isn't about being the smartest—it's about being the most persistent. Keep going, even when it's tough!</p>
+        </div>
+    </div>
+
+    <!-- Page 3: Study Tips -->
+    <div class="page hidden" id="page3">
+        <div class="study-tips">
+            <div class="tips-header">
+                <h2>Effective Study Strategies</h2>
+                <p>Boost your preparation with these proven techniques</p>
+            </div>
+            <div class="tips-container">
+                <div class="tip-card">
+                    <h3><span>1</span> Active Recall</h3>
+                    <p>Test yourself frequently instead of just re-reading. This strengthens memory and identifies weak areas. Use flashcards or practice questions regularly.</p>
                 </div>
-            </div>
-            <div class="date-display" id="analog-date"></div>
-        </div>
-        
-        <!-- Digital Clock Tab -->
-        <div id="digital" class="tab-content">
-            <div class="digital-clock" id="digital-time"></div>
-            <div class="date-display" id="digital-date"></div>
-        </div>
-        
-        <!-- Stopwatch Tab -->
-        <div id="stopwatch" class="tab-content">
-            <div class="time-display" id="stopwatch-display">00:00:00.000</div>
-            <div class="controls">
-                <button class="btn btn-start" id="stopwatch-start">Start</button>
-                <button class="btn btn-stop" id="stopwatch-stop" disabled>Stop</button>
-                <button class="btn btn-reset" id="stopwatch-reset">Reset</button>
-            </div>
-        </div>
-        
-        <!-- Timer Tab -->
-        <div id="timer" class="tab-content">
-            <div class="timer-input">
-                <input type="number" id="hours" min="0" max="23" value="0">
-                <span>:</span>
-                <input type="number" id="minutes" min="0" max="59" value="0">
-                <span>:</span>
-                <input type="number" id="seconds" min="0" max="59" value="0">
-            </div>
-            <div class="time-display" id="timer-display">00:00:00</div>
-            <div class="controls">
-                <button class="btn btn-start" id="timer-start">Start</button>
-                <button class="btn btn-stop" id="timer-stop" disabled>Stop</button>
-                <button class="btn btn-reset" id="timer-reset">Reset</button>
+                <div class="tip-card">
+                    <h3><span>2</span> Spaced Repetition</h3>
+                    <p>Review material at increasing intervals to combat the forgetting curve. Schedule revisions for optimal retention of concepts.</p>
+                </div>
+                <div class="tip-card">
+                    <h3><span>3</span> Concept Mapping</h3>
+                    <p>Create visual diagrams connecting related concepts. This helps in understanding relationships between topics in Biology.</p>
+                </div>
+                <div class="tip-card">
+                    <h3><span>4</span> Timed Practice</h3>
+                    <p>Simulate exam conditions regularly. This improves speed, accuracy, and builds stamina for the actual test day.</p>
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- Page 4: Success Stories -->
+    <div class="page hidden" id="page4">
+        <div class="success-stories">
+            <div class="stories-header">
+                <h2>Success Stories</h2>
+                <p>Real students who achieved their NEET dreams</p>
+            </div>
+            <div class="story-slider">
+                <div class="story-slide active">
+                    <div class="student-avatar">A</div>
+                    <p class="student-quote">"I failed my first mock test with just 120 marks. But I didn't give up. I analyzed my mistakes, focused on weak areas, and improved systematically. On exam day, I scored 620!"</p>
+                    <div class="student-name">Ananya Sharma</div>
+                    <div class="student-rank">AIR 147 | MBBS at AIIMS Delhi</div>
+                </div>
+                <div class="story-slide">
+                    <div class="student-avatar">R</div>
+                    <p class="student-quote">"Balancing school and NEET prep was tough. I created a strict schedule, waking up at 4 AM to study before school. The sacrifice was worth it when I saw my rank."</p>
+                    <div class="student-name">Rahul Verma</div>
+                    <div class="student-rank">AIR 89 | MBBS at KGMU Lucknow</div>
+                </div>
+                <div class="story-slide">
+                    <div class="student-avatar">P</div>
+                    <p class="student-quote">"I was average in Physics and struggled with Organic Chemistry. Instead of avoiding them, I dedicated extra time to these subjects. Turning weaknesses into strengths got me my seat."</p>
+                    <div class="student-name">Priya Patel</div>
+                    <div class="student-rank">AIR 215 | MBBS at GSMC Mumbai</div>
+                </div>
+            </div>
+            <div class="slider-controls">
+                <button class="slider-btn" id="prevBtn">←</button>
+                <button class="slider-btn" id="nextBtn">→</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page 5: Final Motivation -->
+    <div class="page hidden" id="page5">
+        <div class="fireworks" id="fireworks"></div>
+        <div class="final-message">
+            <h2>You've Got This!</h2>
+            <p>Remember why you started this journey. Every hour you study, every problem you solve, every concept you master brings you closer to wearing that white coat.</p>
+            <p>The NEET exam is not just a test of knowledge—it's a test of your determination, resilience, and passion for medicine.</p>
+            <p>When the going gets tough, visualize yourself walking into that medical college. That dream is within your reach. Keep pushing forward!</p>
+            <button class="restart-btn" id="restartBtn">Start Again</button>
+        </div>
+    </div>
+
+    <!-- Navigation Buttons -->
+    <div class="nav-buttons">
+        <button class="nav-btn" id="prevPageBtn">←</button>
+        <button class="nav-btn" id="nextPageBtn">→</button>
+    </div>
+
     <script>
-        // Tab Switching Functionality
-        document.querySelectorAll('.tab-btn').forEach(button => {
-            button.addEventListener('click', () => {
-                const tabId = button.getAttribute('data-tab');
-                
-                // Hide all tab contents
-                document.querySelectorAll('.tab-content').forEach(content => {
-                    content.classList.remove('active');
-                });
-                
-                // Deactivate all buttons
-                document.querySelectorAll('.tab-btn').forEach(btn => {
-                    btn.classList.remove('active');
-                });
-                
-                // Show the selected tab content and activate the button
-                document.getElementById(tabId).classList.add('active');
-                button.classList.add('active');
+        document.addEventListener('DOMContentLoaded', function() {
+            // Page elements
+            const pages = document.querySelectorAll('.page');
+            const startBtn = document.getElementById('startBtn');
+            const restartBtn = document.getElementById('restartBtn');
+            const prevPageBtn = document.getElementById('prevPageBtn');
+            const nextPageBtn = document.getElementById('nextPageBtn');
+            const prevStoryBtn = document.getElementById('prevBtn');
+            const nextStoryBtn = document.getElementById('nextBtn');
+            
+            // Story slider elements
+            const storySlides = document.querySelectorAll('.story-slide');
+            let currentSlide = 0;
+            
+            // Current page index
+            let currentPage = 0;
+            
+            // Initialize first page
+            showPage(currentPage);
+            
+            // Start button click handler
+            startBtn.addEventListener('click', function() {
+                currentPage = 1;
+                showPage(currentPage);
+                animateMotivationCard();
             });
-        });
-
-        // Analog Clock
-        function updateAnalogClock() {
-            const now = new Date();
             
-            const seconds = now.getSeconds();
-            const minutes = now.getMinutes();
-            const hours = now.getHours() % 12;
+            // Restart button click handler
+            restartBtn.addEventListener('click', function() {
+                currentPage = 0;
+                showPage(currentPage);
+            });
             
-            const secondDegrees = ((seconds / 60) * 360) + 90;
-            const minuteDegrees = ((minutes / 60) * 360) + ((seconds / 60) * 6) + 90;
-            const hourDegrees = ((hours / 12) * 360) + ((minutes / 60) * 30) + 90;
+            // Next page button click handler
+            nextPageBtn.addEventListener('click', function() {
+                if (currentPage < pages.length - 1) {
+                    currentPage++;
+                    showPage(currentPage);
+                    
+                    // Trigger animations for specific pages
+                    if (currentPage === 1) animateMotivationCard();
+                    if (currentPage === 2) animateTipCards();
+                    if (currentPage === 4) animateFinalMessage();
+                }
+            });
             
-            document.querySelector('.second-hand').style.transform = `rotate(${secondDegrees}deg)`;
-            document.querySelector('.min-hand').style.transform = `rotate(${minuteDegrees}deg)`;
-            document.querySelector('.hour-hand').style.transform = `rotate(${hourDegrees}deg)`;
+            // Previous page button click handler
+            prevPageBtn.addEventListener('click', function() {
+                if (currentPage > 0) {
+                    currentPage--;
+                    showPage(currentPage);
+                }
+            });
             
-            // Update date display
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            document.getElementById('analog-date').textContent = now.toLocaleDateString(undefined, options);
-        }
-        
-        setInterval(updateAnalogClock, 1000);
-        updateAnalogClock(); // Initial call
-
-        // Digital Clock
-        function updateDigitalClock() {
-            const now = new Date();
+            // Next story button click handler
+            nextStoryBtn.addEventListener('click', function() {
+                navigateStorySlide(1);
+            });
             
-            let hours = now.getHours();
-            const minutes = now.getMinutes().toString().padStart(2, '0');
-            const seconds = now.getSeconds().toString().padStart(2, '0');
-            const ampm = hours >= 12 ? 'PM' : 'AM';
+            // Previous story button click handler
+            prevStoryBtn.addEventListener('click', function() {
+                navigateStorySlide(-1);
+            });
             
-            hours = hours % 12;
-            hours = hours ? hours : 12; // the hour '0' should be '12'
-            hours = hours.toString().padStart(2, '0');
+            // Keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowRight') {
+                    if (currentPage < pages.length - 1) {
+                        currentPage++;
+                        showPage(currentPage);
+                        
+                        if (currentPage === 1) animateMotivationCard();
+                        if (currentPage === 2) animateTipCards();
+                        if (currentPage === 4) animateFinalMessage();
+                    }
+                } else if (e.key === 'ArrowLeft') {
+                    if (currentPage > 0) {
+                        currentPage--;
+                        showPage(currentPage);
+                    }
+                }
+            });
             
-            document.getElementById('digital-time').textContent = `${hours}:${minutes}:${seconds} ${ampm}`;
-            
-            // Update date display
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            document.getElementById('digital-date').textContent = now.toLocaleDateString(undefined, options);
-        }
-        
-        setInterval(updateDigitalClock, 1000);
-        updateDigitalClock(); // Initial call
-
-        // Stopwatch
-        let stopwatchInterval;
-        let stopwatchStartTime;
-        let stopwatchElapsed = 0;
-        
-        document.getElementById('stopwatch-start').addEventListener('click', () => {
-            if (!stopwatchInterval) {
-                stopwatchStartTime = Date.now() - stopwatchElapsed;
-                stopwatchInterval = setInterval(updateStopwatch, 10);
-                document.getElementById('stopwatch-start').disabled = true;
-                document.getElementById('stopwatch-stop').disabled = false;
-            }
-        });
-        
-        document.getElementById('stopwatch-stop').addEventListener('click', () => {
-            if (stopwatchInterval) {
-                clearInterval(stopwatchInterval);
-                stopwatchInterval = null;
-                document.getElementById('stopwatch-start').disabled = false;
-                document.getElementById('stopwatch-stop').disabled = true;
-            }
-        });
-        
-        document.getElementById('stopwatch-reset').addEventListener('click', () => {
-            clearInterval(stopwatchInterval);
-            stopwatchInterval = null;
-            stopwatchElapsed = 0;
-            document.getElementById('stopwatch-display').textContent = '00:00:00.000';
-            document.getElementById('stopwatch-start').disabled = false;
-            document.getElementById('stopwatch-stop').disabled = true;
-        });
-        
-        function updateStopwatch() {
-            const elapsed = Date.now() - stopwatchStartTime;
-            stopwatchElapsed = elapsed;
-            
-            const hours = Math.floor(elapsed / (1000 * 60 * 60)).toString().padStart(2, '0');
-            const minutes = Math.floor((elapsed % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
-            const seconds = Math.floor((elapsed % (1000 * 60)) / 1000).toString().padStart(2, '0');
-            const milliseconds = (elapsed % 1000).toString().padStart(3, '0');
-            
-            document.getElementById('stopwatch-display').textContent = `${hours}:${minutes}:${seconds}.${milliseconds}`;
-        }
-
-        // Timer
-        let timerInterval;
-        let timerEndTime;
-        
-        document.getElementById('timer-start').addEventListener('click', () => {
-            if (!timerInterval) {
-                const hours = parseInt(document.getElementById('hours').value) || 0;
-                const minutes = parseInt(document.getElementById('minutes').value) || 0;
-                const seconds = parseInt(document.getElementById('seconds').value) || 0;
+            // Show specific page and hide others
+            function showPage(index) {
+                pages.forEach((page, i) => {
+                    if (i === index) {
+                        page.classList.remove('hidden');
+                        
+                        // Scroll to top of the page
+                        window.scrollTo(0, 0);
+                    } else {
+                        page.classList.add('hidden');
+                    }
+                });
                 
-                const totalSeconds = hours * 3600 + minutes * 60 + seconds;
-                
-                if (totalSeconds > 0) {
-                    timerEndTime = Date.now() + totalSeconds * 1000;
-                    timerInterval = setInterval(updateTimer, 10);
-                    document.getElementById('timer-start').disabled = true;
-                    document.getElementById('timer-stop').disabled = false;
-                    document.getElementById('hours').disabled = true;
-                    document.getElementById('minutes').disabled = true;
-                    document.getElementById('seconds').disabled = true;
+                // Hide nav buttons on first and last page
+                if (index === 0 || index === pages.length - 1) {
+                    document.querySelector('.nav-buttons').style.display = 'none';
+                } else {
+                    document.querySelector('.nav-buttons').style.display = 'flex';
                 }
             }
-        });
-        
-        document.getElementById('timer-stop').addEventListener('click', () => {
-            if (timerInterval) {
-                clearInterval(timerInterval);
-                timerInterval = null;
-                document.getElementById('timer-start').disabled = false;
-                document.getElementById('timer-stop').disabled = true;
-                document.getElementById('hours').disabled = false;
-                document.getElementById('minutes').disabled = false;
-                document.getElementById('seconds').disabled = false;
-            }
-        });
-        
-        document.getElementById('timer-reset').addEventListener('click', () => {
-            clearInterval(timerInterval);
-            timerInterval = null;
-            document.getElementById('timer-display').textContent = '00:00:00';
-            document.getElementById('timer-start').disabled = false;
-            document.getElementById('timer-stop').disabled = true;
-            document.getElementById('hours').value = '0';
-            document.getElementById('minutes').value = '0';
-            document.getElementById('seconds').value = '0';
-            document.getElementById('hours').disabled = false;
-            document.getElementById('minutes').disabled = false;
-            document.getElementById('seconds').disabled = false;
-        });
-        
-        function updateTimer() {
-            const remaining = timerEndTime - Date.now();
             
-            if (remaining <= 0) {
-                clearInterval(timerInterval);
-                timerInterval = null;
-                document.getElementById('timer-display').textContent = '00:00:00';
-                document.getElementById('timer-start').disabled = false;
-                document.getElementById('timer-stop').disabled = true;
-                document.getElementById('hours').disabled = false;
-                document.getElementById('minutes').disabled = false;
-                document.getElementById('seconds').disabled = false;
+            // Animate motivation card on page 2
+            function animateMotivationCard() {
+                const card = document.querySelector('.motivation-card');
+                setTimeout(() => {
+                    card.classList.add('active');
+                }, 300);
+            }
+            
+            // Animate tip cards on page 3
+            function animateTipCards() {
+                const cards = document.querySelectorAll('.tip-card');
+                setTimeout(() => {
+                    cards.forEach(card => {
+                        card.classList.add('active');
+                    });
+                }, 300);
+            }
+            
+            // Animate final message on page 5
+            function animateFinalMessage() {
+                const message = document.querySelector('.final-message');
+                setTimeout(() => {
+                    message.classList.add('active');
+                    createFireworks();
+                }, 300);
+            }
+            
+            // Navigate between story slides
+            function navigateStorySlide(direction) {
+                storySlides[currentSlide].classList.remove('active');
+                storySlides[currentSlide].classList.add('prev');
                 
-                // Play alarm sound
-                const alarm = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3');
-                alarm.play();
-                return;
+                currentSlide = (currentSlide + direction + storySlides.length) % storySlides.length;
+                
+                storySlides[currentSlide].classList.add('active');
+                storySlides[currentSlide].classList.remove('prev');
             }
             
-            const hours = Math.floor(remaining / (1000 * 60 * 60)).toString().padStart(2, '0');
-            const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
-            const seconds = Math.floor((remaining % (1000 * 60)) / 1000).toString().padStart(2, '0');
+            // Create fireworks animation
+            function createFireworks() {
+                const fireworksContainer = document.getElementById('fireworks');
+                fireworksContainer.innerHTML = '';
+                
+                for (let i = 0; i < 30; i++) {
+                    setTimeout(() => {
+                        const firework = document.createElement('div');
+                        firework.style.position = 'absolute';
+                        firework.style.width = '6px';
+                        firework.style.height = '6px';
+                        firework.style.borderRadius = '50%';
+                        firework.style.backgroundColor = getRandomColor();
+                        firework.style.left = Math.random() * 100 + '%';
+                        firework.style.top = Math.random() * 100 + '%';
+                        firework.style.boxShadow = `0 0 10px 2px ${getRandomColor()}`;
+                        firework.style.animation = `fireworkAnimation 1s ease-out forwards`;
+                        
+                        fireworksContainer.appendChild(firework);
+                        
+                        // Remove firework after animation
+                        setTimeout(() => {
+                            firework.remove();
+                        }, 1000);
+                    }, i * 200);
+                }
+                
+                // Add CSS for animation
+                const style = document.createElement('style');
+                style.textContent = `
+                    @keyframes fireworkAnimation {
+                        0% { transform: translate(0, 0); opacity: 1; }
+                        100% { transform: translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
             
-            document.getElementById('timer-display').textContent = `${hours}:${minutes}:${seconds}`;
-        }
+            // Helper function to get random color
+            function getRandomColor() {
+                const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ff8800', '#ff0088'];
+                return colors[Math.floor(Math.random() * colors.length)];
+            }
+            
+            // Auto-rotate stories every 5 seconds
+            setInterval(() => {
+                if (currentPage === 3) {
+                    navigateStorySlide(1);
+                }
+            }, 5000);
+        });
     </script>
 </body>
 </html>
